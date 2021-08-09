@@ -17,6 +17,7 @@ import 'controller/cubit.dart';
 void main() async {
 //! if we did main async we must add => WidgetsFlutterBinding.ensureInitialized();
 //!    and this mean  make sure that do all before RunApp() then runApp
+//! بيتاكد ان كل حاجه هنا في الميثود خلصت وبعدين يفتح الابلكيشن
 
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -37,8 +38,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => AppCubit()..changeAppMode(fromShared: isDark),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context)=> NewsCubit()..getBusiness(),),
+        BlocProvider(create: (BuildContext context) => AppCubit()..changeAppMode(fromShared: isDark))
+      ],
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -81,6 +85,7 @@ class MyApp extends StatelessWidget {
             ),
             //* //////Dark////////////
             darkTheme: ThemeData(
+              
               textTheme: TextTheme(
                 bodyText1: TextStyle(
                     fontSize: 18.0,
