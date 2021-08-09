@@ -5,7 +5,7 @@ import 'package:news_app_api/controller/states.dart';
 import 'package:news_app_api/shared/componants/components.dart';
 
 class SearchScreen extends StatelessWidget {
-  var searchController = TextEditingController();
+ var searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

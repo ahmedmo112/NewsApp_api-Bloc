@@ -25,14 +25,13 @@ void main() async {
   DioHelper.init();
   await CacheHeler.init();
 
-  bool isDark = CacheHeler.getBoolean(key: 'isDark');
+  bool? isDark = CacheHeler.getBoolean(key: 'isDark');
 
   runApp(MyApp(isDark));
 }
 
 class MyApp extends StatelessWidget {
-
-  final bool isDark;
+ final bool? isDark;
 
   const MyApp(this.isDark);
 
@@ -40,8 +39,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context)=> NewsCubit()..getBusiness(),),
-        BlocProvider(create: (BuildContext context) => AppCubit()..changeAppMode(fromShared: isDark))
+        BlocProvider(
+          create: (context) => NewsCubit()..getBusiness(),
+        ),
+        BlocProvider(
+            create: (BuildContext context) =>
+                AppCubit()..changeAppMode(fromShared: isDark!))
       ],
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
@@ -85,7 +88,6 @@ class MyApp extends StatelessWidget {
             ),
             //* //////Dark////////////
             darkTheme: ThemeData(
-              
               textTheme: TextTheme(
                 bodyText1: TextStyle(
                     fontSize: 18.0,

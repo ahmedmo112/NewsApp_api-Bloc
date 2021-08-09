@@ -1,34 +1,32 @@
-import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app_api/medouls/web_view/web_view_screen.dart';
 
 class DefaultFormField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType type;
-  final Function onSubmit;
-  final Function onchange;
-  final Function validate;
+  final Function? onSubmit;
+  final Function? onchange;
+  final Function? validate;
   final String label;
   final IconData prefix;
   final bool isPassword;
-  final IconData suffix;
-  final Function onTap;
+  final IconData? suffix;
+  final Function? onTap;
   final isEnabled;
 
   const DefaultFormField({
-    Key key,
-    @required this.controller,
-    @required this.type,
+    required this.controller,
+    required this.type,
     this.onSubmit,
     this.onchange,
     this.onTap,
     this.isEnabled = true,
-    @required this.validate,
-    @required this.label,
-    @required this.prefix,
+    required this.validate,
+    required this.label,
+    required this.prefix,
     this.suffix,
     this.isPassword = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +34,19 @@ class DefaultFormField extends StatelessWidget {
       controller: controller,
       keyboardType: type,
       obscureText: isPassword,
-      onFieldSubmitted: onSubmit,
-      onChanged: onchange,
-      onTap: onTap,
+      onFieldSubmitted: (s) {
+        onSubmit!(s);
+      },
+      onChanged: (s) {
+        onchange!(s);
+      },
+      onTap: () {
+        onTap!();
+      },
       enabled: isEnabled,
-      validator: validate,
+      validator: (s) {
+        validate!(s);
+      },
       decoration: InputDecoration(
           labelText: label,
           prefixIcon: Icon(prefix),
@@ -112,9 +118,9 @@ Widget buildArticleItem(dynamic article, context) => InkWell(
       ),
     );
 
-Widget articleBuilder(list, context , {isSearch= false}) => ConditionalBuilder(
-      condition: list.length > 0,
-      builder: (context) => ListView.separated(
+Widget articleBuilder(list, context, {isSearch = false}) => 
+       list.length > 0?
+       ListView.separated(
           physics: BouncingScrollPhysics(),
           itemBuilder: (context, index) =>
               buildArticleItem(list[index], context),
@@ -126,8 +132,12 @@ Widget articleBuilder(list, context , {isSearch= false}) => ConditionalBuilder(
                   color: Colors.grey[300],
                 ),
               ),
-          itemCount: list.length),
-      fallback: (context) =>isSearch? Container(): Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+          itemCount: 
+          list.length
+          ):
+       isSearch
+          ? Container()
+          : Center(
+              child: CircularProgressIndicator(),
+            );
+    
